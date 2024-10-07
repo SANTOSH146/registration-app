@@ -21,11 +21,18 @@ pipeline {
             }
         }
 
+        stage('Debug') {
+            steps {
+                sh 'ls -la webapp/target'
+            }
+        }
+
+
         stage('Deployment') {
             steps {
                 deploy adapters: [tomcat9(credentialsId: 'TomcatCreds', url: 'http://98.83.118.82:8080/')], 
                        contextPath: 'app', 
-                       war: 'target/*.war'
+                       war: 'webapp/target/*.war'
             }
         }
 
@@ -34,7 +41,7 @@ pipeline {
                 emailext(
                     subject: "Job Completed",
                     body: "Jenkins pipeline job for maven build job completed",
-                    to: "sudhir0504@gmail.com"
+                    to: "santoshk6r@gmail.com"
                 )
             }
         }
