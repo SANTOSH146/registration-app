@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: app
+  name: app
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: app
+  template:
+    metadata:
+      labels:
+        app: app
+    spec:
+      containers:
+      - name: my-app
+        image: 600627362550.dkr.ecr.us-east-1.amazonaws.com/santosh:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8085
+          name: http
+          protocol: TCP
+# service type loadbalancer#       
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: app
+    k8s-app: app
+  name: app
+spec:
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 8085
+  type: LoadBalancer
+  selector:
+    app: app
